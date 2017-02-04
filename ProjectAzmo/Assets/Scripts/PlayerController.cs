@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 
-public class HandController : MonoBehaviour {
+public class PlayerController : MonoBehaviour {
 
     private SteamVR_TrackedObject rTrackedObj;
     private SteamVR_Controller.Device rController { get { return SteamVR_Controller.Input((int)rTrackedObj.index); } }
@@ -13,14 +14,32 @@ public class HandController : MonoBehaviour {
     public GameObject rightController;
     public GameObject leftController;
 
+    private List<GameObject> triggeredObjects;
+
     void Start()
     {
         rTrackedObj = rightController.GetComponent<SteamVR_TrackedObject>();
         lTrackedObj = leftController.GetComponent<SteamVR_TrackedObject>();
     }
 
-    void Update ()
+    void Update()
     {
-	    
-	}
+        if(rController.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+        {
+
+        }
+    }
+
+    void OnTriggerEnter(Collision col)
+    {
+        if(col.gameObject.GetComponent<Interactable>())
+        {
+            triggeredObjects.Add(col.gameObject);
+        }
+    }
+
+    void OnTriggerExit(Collision col)
+    {
+        triggeredObjects.Remove(col.gameObject);
+    }
 }
