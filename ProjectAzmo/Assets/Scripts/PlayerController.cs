@@ -14,8 +14,6 @@ public class PlayerController : MonoBehaviour {
     public GameObject rightController;
     public GameObject leftController;
 
-    private List<GameObject> triggeredObjects;
-
     void Start()
     {
         rTrackedObj = rightController.GetComponent<SteamVR_TrackedObject>();
@@ -26,20 +24,37 @@ public class PlayerController : MonoBehaviour {
     {
         if(rController.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
-
+            Interactable[] interactableObjects = FindObjectsOfType<Interactable>();
+            float shortestDistance = 1000;
+            GameObject closestObject = null;
+            foreach(Interactable curObj in interactableObjects)
+            {
+                float objDist = Vector3.Distance(rightController.transform.position, curObj.transform.position);
+                if (objDist < shortestDistance)
+                {
+                    shortestDistance = objDist;
+                    closestObject = curObj.gameObject;
+                }
+            }
+            if(closestObject != null)
+            {
+                closestObject.GetComponent<Interactable>().InteractTrigger(true);
+            }
+            else
+            {
+                
+            }
         }
-    }
-
-    void OnTriggerEnter(Collision col)
-    {
-        if(col.gameObject.GetComponent<Interactable>())
+        if (rController.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
-            triggeredObjects.Add(col.gameObject);
+            Interactable[] interactableObjects = FindObjectsOfType<Grabbable>();
+            foreach (Interactable curObj in interactableObjects)
+            {
+                if (curObj.GetComponent<Grabbable>().grabbed && curObj.GetComponent<Grabbable>().rightHand)
+                {
+                    curObj.GetComponent<Grabbable>().ReleaseTrigger();
+                }
+            }
         }
-    }
-
-    void OnTriggerExit(Collision col)
-    {
-        triggeredObjects.Remove(col.gameObject);
     }
 }
