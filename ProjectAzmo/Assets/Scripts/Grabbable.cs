@@ -6,11 +6,8 @@ public class Grabbable : Interactable {
     public bool grabbed = false;
     public bool rightHand = false;
 
-    public Vector3 oldPos;
-
     void Update()
     {
-        oldPos = transform.position;
         if (grabbed)
         {
             transform.position = rightHand ? GameObject.Find("Controller (right)").transform.position : GameObject.Find("Controller (left)").transform.position;
