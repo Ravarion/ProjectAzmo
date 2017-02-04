@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Interactable : MonoBehaviour {
 
-    virtual public bool InteractTrigger(bool rightController)
+    virtual public bool InteractTrigger(bool rightController, GameObject curController)
     {
         return false;
     }

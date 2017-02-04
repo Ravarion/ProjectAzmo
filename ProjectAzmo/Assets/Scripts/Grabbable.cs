@@ -10,14 +10,14 @@ public class Grabbable : Interactable {
 
     void Update()
     {
+        oldPos = transform.position;
         if (grabbed)
         {
-            oldPos = transform.position;
             transform.position = rightHand ? GameObject.Find("Controller (right)").transform.position : GameObject.Find("Controller (left)").transform.position;
         }
     }
 
-    override public bool InteractTrigger(bool rightController)
+    override public bool InteractTrigger(bool rightController, GameObject curController)
     {
         rightHand = rightController;
         grabbed = true;
@@ -26,11 +26,19 @@ public class Grabbable : Interactable {
 
     override public bool ReleaseTrigger()
     {
+        if (rightHand)
+        {
+            GetComponent<Rigidbody>().velocity = FindObjectOfType<PlayerController>().rController.velocity;
+            GetComponent<Rigidbody>().angularVelocity = FindObjectOfType<PlayerController>().rController.angularVelocity;
+        }
+        else
+        {
+            GetComponent<Rigidbody>().velocity = FindObjectOfType<PlayerController>().lController.velocity;
+            GetComponent<Rigidbody>().angularVelocity = FindObjectOfType<PlayerController>().lController.angularVelocity;
+        }
         grabbed = false;
         rightHand = false;
-        Vector3 velocity = transform.position - oldPos;
-        GetComponent<Rigidbody>().velocity = velocity * 100;
-        print(velocity);
+        
         return true;
     }
 }
