@@ -16,10 +16,9 @@ public class BonfireLighting : MonoBehaviour {
 
     void Update()
     {
-        print(curTimer);
         if (curTimer > 0)
             curTimer -= Time.deltaTime;
-        else if (curTimer <= 0)
+        else if (curTimer <= 0 && curBonfire <= bonfires.Length)
         {
             curTimer = timer;
             bonfires[curBonfire].SetActive(true);

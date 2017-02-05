@@ -16,20 +16,27 @@ public class PlayerController : MonoBehaviour {
     public GameObject rightController;
     public GameObject leftController;
 
+    public AudioClip hurtSound;
+    public AudioClip dieSound;
+    public AudioClip biteSound;
+
     private int calories = 0;
     public int GetCalories() { return calories; }
-    public void AddCalories(int num) { GetComponent<AudioSource>().Play(); calories += num; AddRegenCounter(num); UpdateGUI(); }
+    public void AddCalories(int num) { PlayBiteSound(); calories += num; AddRegenCounter(num); UpdateGUI(); }
     public void RemoveCalories(int num) { calories -= num; UpdateGUI(); }
     public int health = 5;
     public int GetHealth() { return health; }
     public void AddHealth(int num) { health += num; if (health > 5) { health = 5; } UpdateGUI(); }
-    public void RemoveHealth(int num) { health -= num; if (health <= 0) { GameOver(); } UpdateGUI(); }
+    public void RemoveHealth(int num, int damageType) { health -= num; if (health <= 0) { Lose(damageType); return; } UpdateGUI(); PlayHurtSound(); }
 
     private int healthRegenCounter = 0;
     public void AddRegenCounter(int num) { healthRegenCounter += num; if (healthRegenCounter >= 3) { healthRegenCounter = 0; AddHealth(1); } }
 
     private Text healthText;
     private Text caloriesText;
+
+    public int destroyedTowers = 0;
+    public int murderedSoldiers = 0;
 
     void Start()
     {
@@ -76,20 +83,43 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void Win()
+    {
+
+    }
+
+    public void Lose(int loseMethod)
+    {
+        PlayDieSound();
+        //StartCoroutine("FadeToBlack");
+    }
+
+    private IEnumerator FadeToBlack()
+    {
+        yield return new WaitForSeconds(3f);
+        //TODO: Find<WinLose>().Lose()
+    }
+
+    private void PlayHurtSound()
+    {
+        GetComponent<AudioSource>().clip = hurtSound;
+        GetComponent<AudioSource>().Play();
+    }
+
+    private void PlayDieSound()
+    {
+        GetComponent<AudioSource>().clip = dieSound;
+        GetComponent<AudioSource>().Play();
+    }
+
+    private void PlayBiteSound()
+    {
+        GetComponent<AudioSource>().clip = biteSound;
+        GetComponent<AudioSource>().Play();
+    }
+
     private void InteractTrigger(bool rightHand)
     {
-        /*Interactable[] interactableObjects = FindObjectsOfType<Interactable>();
-        float shortestDistance = 1000;
-        GameObject closestObject = null;
-        foreach (Interactable curObj in interactableObjects)
-        {
-            float objDist = Vector3.Distance(rightController.transform.position, curObj.transform.position);
-            if (objDist < shortestDistance)
-            {
-                shortestDistance = objDist;
-                closestObject = curObj.gameObject;
-            }
-        }*/
         GameObject curController = rightHand ? rightController : leftController;
         ControllerScript curContScript = curController.transform.GetChild(0).GetComponent<ControllerScript>();
         if (curContScript.collidedObj != null)
@@ -108,25 +138,12 @@ public class PlayerController : MonoBehaviour {
 
     private void ReleaseTrigger(bool rightHand)
     {
-        /*Interactable[] interactableObjects = FindObjectsOfType<Grabbable>();
-        foreach (Interactable curObj in interactableObjects)
-        {
-            if (curObj.GetComponent<Grabbable>().grabbed && curObj.GetComponent<Grabbable>().rightHand == rightHand)
-            {
-                curObj.GetComponent<Grabbable>().ReleaseTrigger();
-            }
-        }*/
         GameObject curController = rightHand ? rightController : leftController;
         curController.transform.GetChild(0).GetComponent<SphereCollider>().isTrigger = true;
         if (curController.transform.GetChild(0).GetComponent<ControllerScript>().heldObj != null)
         {
             curController.transform.GetChild(0).GetComponent<ControllerScript>().heldObj.GetComponent<Interactable>().ReleaseTrigger();
         }
-    }
-
-    public void GameOver()
-    {
-        SceneManager.LoadScene(0);
     }
 
     private void UpdateGUI()

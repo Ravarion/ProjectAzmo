@@ -27,7 +27,7 @@ public class Explosion : MonoBehaviour {
         }
         if(Vector3.Distance(FindObjectOfType<Stomach>().transform.position, transform.position) < 1f)
         {
-            FindObjectOfType<PlayerController>().RemoveHealth(1);
+            FindObjectOfType<PlayerController>().RemoveHealth(1,1);
         }
     }
 

@@ -11,13 +11,7 @@ public class PukeBall : Grabbable {
         if(collision.gameObject.name == "CannonTower")
         {
             Instantiate(explosionFab, transform.position, Quaternion.identity);
-            Destroy(collision.gameObject);
-            if(FindObjectsOfType<TowerScript>().Length == 0)
-            {
-                //Win!
-                //Show Credits
-                //Wait for reset button to be hit
-            }
+            collision.gameObject.GetComponent<TowerScript>().DestroyTower();
             Destroy(gameObject);
         }
         if(collision.gameObject.GetComponent<Cannon>())

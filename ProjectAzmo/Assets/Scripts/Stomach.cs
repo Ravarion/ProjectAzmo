@@ -13,11 +13,11 @@ public class Stomach : Interactable {
             Destroy(collision.gameObject);
             FindObjectOfType<PlayerController>().AddCalories(1); //Note: In text it should show this being x100,000
         }
-        if(collision.gameObject.tag == "poison")
+        /*if(collision.gameObject.tag == "poison")
         {
             Destroy(collision.gameObject);
             FindObjectOfType<PlayerController>().RemoveHealth(1);
-        }
+        }*/
     }
 
     public override bool InteractTrigger(bool rightController, GameObject curController)

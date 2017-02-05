@@ -7,6 +7,7 @@ public class Cannon : MonoBehaviour {
     public AudioClip cannonShotSound;
     public AudioClip fuseSound;
 
+    public GameObject flashObj;
     public Material redFlashMat;
     public Material originalMat;
     public GameObject cannonBallPrefab;
@@ -16,7 +17,6 @@ public class Cannon : MonoBehaviour {
     private void Start()
     {
         shootTimer = shootRate + Random.Range(0f, 16f);
-        gameObject.GetComponent<MeshRenderer>().material.color = Color.grey;
     }
 
     void Update() {
@@ -36,13 +36,13 @@ public class Cannon : MonoBehaviour {
         {
             if (Mathf.Approximately(timer, 1) || Mathf.Approximately(timer, .75f) || Mathf.Approximately(timer, .5f) || Mathf.Approximately(timer, .25f))
             {
-                if (gameObject.GetComponent<MeshRenderer>().material.color == Color.grey)
+                if (flashObj.GetComponent<MeshRenderer>().material.color == Color.white)
                 {
-                    gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                    flashObj.GetComponent<MeshRenderer>().material.color = Color.red;
                 }
                 else
                 {
-                    gameObject.GetComponent<MeshRenderer>().material.color = Color.grey;
+                    flashObj.GetComponent<MeshRenderer>().material.color = Color.white;
                 }
 
             }

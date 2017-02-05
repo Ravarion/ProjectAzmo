@@ -12,7 +12,7 @@ public class Cannonball : Grabbable {
         {
             if(active)
             {
-                FindObjectOfType<PlayerController>().RemoveHealth(1);
+                FindObjectOfType<PlayerController>().RemoveHealth(1, 0);
             }
             else
             {

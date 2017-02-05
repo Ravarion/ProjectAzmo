@@ -62,9 +62,9 @@ public class AIMovement : MonoBehaviour {
         }
         else
         {
-            if (Vector3.Distance(transform.position, GetComponent<NavMeshAgent>().destination) <= 0.5)
+            if (Vector3.Distance(transform.position, GetComponent<NavMeshAgent>().destination) <= 0.5f)
             {
-                GetComponent<Exploding>().Explode();
+                StartCoroutine(GetComponent<Exploding>().StartExplodeAnimation());
             }
         }
 	}
