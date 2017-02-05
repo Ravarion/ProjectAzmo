@@ -44,18 +44,34 @@ public class PlayerController : MonoBehaviour {
     {
         if(rController.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
+            if(rightController.transform.FindChild("Model").GetComponent<Animator>())
+            {
+                rightController.transform.FindChild("Model").GetComponent<Animator>().SetBool("Closed", true);
+            }
             InteractTrigger(true);
         }
         if (rController.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
+            if (rightController.transform.FindChild("Model").GetComponent<Animator>())
+            {
+                rightController.transform.FindChild("Model").GetComponent<Animator>().SetBool("Closed", false);
+            }
             ReleaseTrigger(true);
         }
         if (lController.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
+            if (leftController.transform.FindChild("Model").GetComponent<Animator>())
+            {
+                leftController.transform.FindChild("Model").GetComponent<Animator>().SetBool("Closed", true);
+            }
             InteractTrigger(false);
         }
         if (lController.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
+            if (leftController.transform.FindChild("Model").GetComponent<Animator>())
+            {
+                leftController.transform.FindChild("Model").GetComponent<Animator>().SetBool("Closed", false);
+            }
             ReleaseTrigger(false);
         }
     }

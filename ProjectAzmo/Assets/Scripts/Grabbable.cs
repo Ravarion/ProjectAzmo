@@ -11,7 +11,8 @@ public class Grabbable : Interactable {
     {
         if (grabbed)
         {
-            transform.position = rightHand ? GameObject.Find("Controller (right)").transform.position : GameObject.Find("Controller (left)").transform.position;
+            transform.position = rightHand ? GameObject.Find("Controller (right)").transform.position - GameObject.Find("Controller (right)").transform.right * .04f : GameObject.Find("Controller (left)").transform.position + GameObject.Find("Controller (left)").transform.right * .04f;
+            transform.rotation = rightHand ? GameObject.Find("Controller (right)").transform.rotation : GameObject.Find("Controller (left)").transform.rotation;
         }
     }
 
@@ -19,6 +20,7 @@ public class Grabbable : Interactable {
     {
         rightHand = rightController;
         grabbed = true;
+        GetComponent<Rigidbody>().freezeRotation = true;
         if(GetComponent<AIMovement>())
         {
             GetComponent<AIMovement>().enabled = false;
@@ -30,6 +32,7 @@ public class Grabbable : Interactable {
 
     override public bool ReleaseTrigger()
     {
+        GetComponent<Rigidbody>().freezeRotation = false;
         if (rightHand)
         {
             GetComponent<Rigidbody>().velocity = FindObjectOfType<PlayerController>().rController.velocity;

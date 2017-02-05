@@ -24,6 +24,7 @@ public class Stomach : Interactable {
     {
         if(FindObjectOfType<PlayerController>().GetCalories() >= 3)
         {
+            GetComponent<AudioSource>().Play();
             GameObject pukeBall = Instantiate(pukeBallFab) as GameObject;
             pukeBall.GetComponent<Grabbable>().InteractTrigger(rightController, curController);
             curController.transform.GetChild(0).GetComponent<ControllerScript>().heldObj = pukeBall;
