@@ -11,7 +11,7 @@ public class Stomach : Interactable {
         if(collision.gameObject.name == "Human")
         {
             Destroy(collision.gameObject);
-            FindObjectOfType<PlayerController>().calories += 1; //Note: In text it should show this being x100,000
+            FindObjectOfType<PlayerController>().AddCalories(1); //Note: In text it should show this being x100,000
         }
     }
 

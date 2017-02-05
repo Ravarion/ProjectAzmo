@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
 
@@ -14,16 +16,27 @@ public class PlayerController : MonoBehaviour {
     public GameObject rightController;
     public GameObject leftController;
 
-    public int calories;
-    public int health;
+    private int calories = 0;
+    public int GetCalories() { return calories; }
+    public void AddCalories(int num) { calories += num; HealthRegenCounter += num; if (HealthRegenCounter > 5) { AddHealth(1); } UpdateGUI(); }
+    public void RemoveCalories(int num) { calories -= num; UpdateGUI(); }
+    private int health = 5;
+    public int GetHealth() { return health; }
+    public void AddHealth(int num) { health += num; if (health > 5) { health = 5; } UpdateGUI(); }
+    public void RemoveHealth(int num) { health -= num; if (health <= 0) { GameOver(); } UpdateGUI(); }
+
+    private int HealthRegenCounter = 0;
+
+    private Text healthText;
+    private Text caloriesText;
 
     void Start()
     {
         rTrackedObj = rightController.GetComponent<SteamVR_TrackedObject>();
         lTrackedObj = leftController.GetComponent<SteamVR_TrackedObject>();
 
-        calories = 0;
-        health = 3;
+        healthText = GameObject.Find("HealthText").GetComponent<Text>();
+        caloriesText = GameObject.Find("CaloriesText").GetComponent<Text>();
     }
 
     void Update()
@@ -70,6 +83,10 @@ public class PlayerController : MonoBehaviour {
                 curContScript.heldObj = curContScript.collidedObj;
             }
         }
+        else
+        {
+            curController.transform.GetChild(0).GetComponent<SphereCollider>().isTrigger = false;
+        }
     }
 
     private void ReleaseTrigger(bool rightHand)
@@ -83,9 +100,21 @@ public class PlayerController : MonoBehaviour {
             }
         }*/
         GameObject curController = rightHand ? rightController : leftController;
+        curController.transform.GetChild(0).GetComponent<SphereCollider>().isTrigger = true;
         if (curController.transform.GetChild(0).GetComponent<ControllerScript>().heldObj != null)
         {
             curController.transform.GetChild(0).GetComponent<ControllerScript>().heldObj.GetComponent<Interactable>().ReleaseTrigger();
         }
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    private void UpdateGUI()
+    {
+        healthText.text = "Health: " + GetHealth();
+        caloriesText.text = "Calories: " + GetCalories();
     }
 }
