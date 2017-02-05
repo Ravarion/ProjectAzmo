@@ -46,7 +46,7 @@ public class SpawnScript : MonoBehaviour {
                 v -= spawnRates[i];
                 if(v <= 0)
                 {
-                    print("[" + n + "] option " + i);
+                    //print("[" + n + "] option " + i);
                     //we have our unit to spawn, now we need to decide what spawn location, and where it should eventually path to
                     spawnUnit(i, Spawners[(int)(Random.value * Spawners.Length)], Spawners[(int)(Random.value * Spawners.Length)]);
                     i = spawnRates.Length;

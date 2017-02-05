@@ -18,14 +18,15 @@ public class PlayerController : MonoBehaviour {
 
     private int calories = 0;
     public int GetCalories() { return calories; }
-    public void AddCalories(int num) { calories += num; HealthRegenCounter += num; if (HealthRegenCounter > 5) { AddHealth(1); } UpdateGUI(); }
+    public void AddCalories(int num) { GetComponent<AudioSource>().Play(); calories += num; AddRegenCounter(num); UpdateGUI(); }
     public void RemoveCalories(int num) { calories -= num; UpdateGUI(); }
-    private int health = 5;
+    public int health = 5;
     public int GetHealth() { return health; }
     public void AddHealth(int num) { health += num; if (health > 5) { health = 5; } UpdateGUI(); }
     public void RemoveHealth(int num) { health -= num; if (health <= 0) { GameOver(); } UpdateGUI(); }
 
-    private int HealthRegenCounter = 0;
+    private int healthRegenCounter = 0;
+    public void AddRegenCounter(int num) { healthRegenCounter += num; if (healthRegenCounter >= 3) { healthRegenCounter = 0; AddHealth(1); } }
 
     private Text healthText;
     private Text caloriesText;
@@ -115,6 +116,6 @@ public class PlayerController : MonoBehaviour {
     private void UpdateGUI()
     {
         healthText.text = "Health: " + GetHealth();
-        caloriesText.text = "Calories: " + GetCalories();
+        caloriesText.text = "Iron: " + GetCalories();
     }
 }

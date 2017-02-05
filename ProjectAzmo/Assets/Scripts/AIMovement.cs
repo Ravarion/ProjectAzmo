@@ -4,7 +4,7 @@ using System.Collections;
 
 public class AIMovement : MonoBehaviour {
 	public Vector3 destination;
-	Vector3[] spawnPoints;
+	GameObject[] spawnPoints;
 	public float timer;
 	public int timeToExit;
     public int finalDestination;
@@ -14,14 +14,18 @@ public class AIMovement : MonoBehaviour {
 		timer = Random.Range (1f, 4f);
 		timeToExit = Random.Range (3, 5);
         if (tag == "explosive")
+        {
             destination = FindObjectOfType<Stomach>().transform.position;
+            destination = new Vector3(destination.x, 0.9f, destination.z);
+            GetComponent<NavMeshAgent>().SetDestination(destination);
+        }
         else
-		    destination = RandCoord();
-		GetComponent<NavMeshAgent> ().SetDestination (destination);
-        GameObject[] spawnScripts = GameObject.FindGameObjectsWithTag("Spawner");
-		spawnPoints = new Vector3[spawnScripts.Length];
-		for (int i = 0; i < spawnScripts.Length; i++) {
-			spawnPoints [i] = spawnScripts[i].transform.position;
+        {
+            spawnPoints = GameObject.FindGameObjectsWithTag("spawner");
+            destination = spawnPoints[0].transform.position;
+            destination = new Vector3(destination.x, 0.9f, destination.z);
+            destination = RandCoord();
+            GetComponent<NavMeshAgent> ().SetDestination (destination);
 		}
 	}
 
@@ -40,7 +44,8 @@ public class AIMovement : MonoBehaviour {
                 {
                     timeToExit -= 1;
                     finalDestination = Random.Range(0, spawnPoints.Length);
-                    GetComponent<NavMeshAgent>().SetDestination(spawnPoints[finalDestination]);
+                    destination = spawnPoints[finalDestination].transform.position;
+                    GetComponent<NavMeshAgent>().SetDestination(destination);
                 }
                 else if(timeToExit > 0)
                 {
@@ -51,21 +56,23 @@ public class AIMovement : MonoBehaviour {
             }
             if (timeToExit < 0)
             {
-                if (Vector3.Distance(transform.position, GetComponent<NavMeshAgent>().destination) <= 0.1)
+                if (Vector3.Distance(transform.position, GetComponent<NavMeshAgent>().destination) <= 0.01)
                     Destroy(gameObject);
             }
         }
         else
         {
             if (Vector3.Distance(transform.position, GetComponent<NavMeshAgent>().destination) <= 0.5)
-                Destroy(gameObject);
+            {
+                GetComponent<Exploding>().Explode();
+            }
         }
 	}
 
 	Vector3 RandCoord()
 	{
 		float xCoord = Random.Range (-0.8f, 0.8f);
-		float yCoord = 0.9f;
+		float yCoord = 0.0f;
 		float zCoord = Random.Range (0f, 1.25f);
         Vector3 coord = new Vector3(xCoord, yCoord, zCoord);
         while (coord.x >= -0.65f && coord.x <= 0.65f && coord.z >= 0f && coord.z <= 0.65f)

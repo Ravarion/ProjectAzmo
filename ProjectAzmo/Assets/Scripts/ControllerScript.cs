@@ -9,7 +9,6 @@ public class ControllerScript : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        print(other);
         if(other.GetComponent<Interactable>())
         {
             collidedObj = other.gameObject;

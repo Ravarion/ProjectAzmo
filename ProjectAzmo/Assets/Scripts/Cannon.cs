@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour {
 
+    public AudioClip cannonShotSound;
+    public AudioClip fuseSound;
+
     public Material redFlashMat;
     public Material originalMat;
     public GameObject cannonBallPrefab;
@@ -16,20 +19,22 @@ public class Cannon : MonoBehaviour {
         gameObject.GetComponent<MeshRenderer>().material.color = Color.grey;
     }
 
-    void Update () {
+    void Update() {
         shootTimer -= Time.deltaTime;
-        if(shootTimer <= 0)
+        if (shootTimer <= 0)
         {
             StartCoroutine("FlashRed");
             shootTimer = shootRate + Random.Range(0f, 16f);
         }
-	}
+    }
 
     IEnumerator FlashRed()
     {
-        for(float timer = 1f; timer >= 0; timer -= 0.05f)
+        GetComponent<AudioSource>().clip = fuseSound;
+        GetComponent<AudioSource>().Play();
+        for (float timer = 1f; timer >= 0; timer -= 0.05f)
         {
-            if (Mathf.Approximately(timer,1) || Mathf.Approximately(timer, .75f) || Mathf.Approximately(timer, .5f) || Mathf.Approximately(timer, .25f))
+            if (Mathf.Approximately(timer, 1) || Mathf.Approximately(timer, .75f) || Mathf.Approximately(timer, .5f) || Mathf.Approximately(timer, .25f))
             {
                 if (gameObject.GetComponent<MeshRenderer>().material.color == Color.grey)
                 {
@@ -39,15 +44,22 @@ public class Cannon : MonoBehaviour {
                 {
                     gameObject.GetComponent<MeshRenderer>().material.color = Color.grey;
                 }
-                
+
             }
             yield return new WaitForSeconds(.05f);
         }
         Shoot();
     }
 
+    public void Destruct()
+    {
+        transform.parent.GetComponent<TowerScript>().SetDead();
+    }
+
     void Shoot()
     {
+        GetComponent<AudioSource>().clip = cannonShotSound;
+        GetComponent<AudioSource>().Play();
         Quaternion originalRot = transform.rotation;
         transform.LookAt(FindObjectOfType<Stomach>().transform);
         GameObject cannonBall = Instantiate(cannonBallPrefab, transform.position + transform.forward*.1f, transform.rotation) as GameObject;

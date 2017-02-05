@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class Grabbable : Interactable {
@@ -18,6 +19,12 @@ public class Grabbable : Interactable {
     {
         rightHand = rightController;
         grabbed = true;
+        if(GetComponent<AIMovement>())
+        {
+            GetComponent<AIMovement>().enabled = false;
+            GetComponent<NavMeshAgent>().enabled = false;
+            GetComponent<AudioSource>().Stop();
+        }
         return true;
     }
 

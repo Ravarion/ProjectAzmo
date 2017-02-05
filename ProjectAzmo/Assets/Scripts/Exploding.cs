@@ -17,8 +17,14 @@ public class Exploding : Grabbable {
     {
         if(primed)
         {
-            Instantiate(explosionFab, transform.position, transform.rotation);
-            Destroy(gameObject);
+            Explode();
         }
+    }
+
+    public void Explode()
+    {
+        GameObject explosion = Instantiate(explosionFab, transform.position, transform.rotation);
+        explosion.GetComponent<Explosion>().origin = gameObject;
+        Destroy(gameObject);
     }
 }
