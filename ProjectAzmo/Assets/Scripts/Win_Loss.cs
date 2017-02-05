@@ -15,12 +15,12 @@ public class Win_Loss : MonoBehaviour {
 		
 	}
 
-    void Win()
+    public void Win()
     {
 
     }
 
-    void Lose(int whyDidYouDie)
+    public void Lose(int whyDidYouDie)
     {
         string endText = "";
         if(whyDidYouDie == 0)           //Death by Exploding Human
@@ -36,7 +36,7 @@ public class Win_Loss : MonoBehaviour {
             endText = "The beacon's were lit, and you were outnumbered";
         }
 
-        SceneManager.LoadScene(""); //fade into game over screen/scene
+        SceneManager.LoadScene(1); //fade into game over screen/scene
         //enable option to go back to main menu (throw a human at the option?)
     }
 }

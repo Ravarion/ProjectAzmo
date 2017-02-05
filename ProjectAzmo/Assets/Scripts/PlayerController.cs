@@ -91,6 +91,7 @@ public class PlayerController : MonoBehaviour {
     public void Lose(int loseMethod)
     {
         PlayDieSound();
+        FindObjectOfType<Win_Loss>().Lose(loseMethod);
         //StartCoroutine("FadeToBlack");
     }
 
